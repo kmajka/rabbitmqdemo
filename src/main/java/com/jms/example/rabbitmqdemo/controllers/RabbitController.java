@@ -1,6 +1,8 @@
 package com.jms.example.rabbitmqdemo.controllers;
 
 import com.jms.example.rabbitmqdemo.config.RabbitMQConfig;
+import com.jms.example.rabbitmqdemo.fanout.publisher.RabbitFanoutPublisher;
+import com.jms.example.rabbitmqdemo.header.publisher.RabbitHeaderPublisher;
 import com.jms.example.rabbitmqdemo.model.SimpleMessage;
 import com.jms.example.rabbitmqdemo.direct.publisher.RabbitDirectMailPublisher;
 import com.jms.example.rabbitmqdemo.topic.publisher.RabbitTopicPublisher;
@@ -8,15 +10,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 public class RabbitController {
 
     private final RabbitDirectMailPublisher rabbitDirectPublisher;
     private final RabbitTopicPublisher rabbitTopicPublisher;
+    private final RabbitFanoutPublisher rabbitFanoutPublisher;
+    private final RabbitHeaderPublisher rabbitHeaderPublisher;
 
-    public RabbitController(RabbitDirectMailPublisher rabbitDirectPublisher, RabbitTopicPublisher rabbitTopicPublisher) {
+    public RabbitController(RabbitDirectMailPublisher rabbitDirectPublisher,
+                            RabbitTopicPublisher rabbitTopicPublisher,
+                            RabbitFanoutPublisher rabbitFanoutPublisher,
+                            RabbitHeaderPublisher rabbitHeaderPublisher) {
         this.rabbitDirectPublisher = rabbitDirectPublisher;
         this.rabbitTopicPublisher = rabbitTopicPublisher;
+        this.rabbitFanoutPublisher = rabbitFanoutPublisher;
+        this.rabbitHeaderPublisher = rabbitHeaderPublisher;
     }
 
 //  http://localhost:8080/send-message-direct-queue?body=this is some message
@@ -49,4 +60,32 @@ public class RabbitController {
 
         return "topic massage: " + body;
     }
+
+    //  http://localhost:8080/send-message-fanout-queue?body=this is some message
+    @GetMapping("send-message-fanout-queue")
+    public String sendMessageFanout(@RequestParam("body") String body) {
+
+        var message1 = new SimpleMessage("server01", body + " send message to Queue as Fanout [1].");
+        rabbitFanoutPublisher.sendMessageToQueue(RabbitMQConfig.FANOUT_EXCHANGE_NAME, message1);
+
+        var message2 = new SimpleMessage("server02", body + " send message to Queue as Fanout [2].");
+        rabbitFanoutPublisher.sendMessageToQueue(RabbitMQConfig.FANOUT_EXCHANGE_NAME, message2);
+
+        var message3 = new SimpleMessage("server03", body + " send message to Queue as Fanout [2].");
+        rabbitFanoutPublisher.sendMessageToQueue(RabbitMQConfig.FANOUT_EXCHANGE_NAME, message3);
+
+        return "fanout massage: " + body;
+    }
+
+    //  http://localhost:8080/send-message-headers-queue?body=this is some message
+    @GetMapping("send-message-headers-queue")
+    public String sendMessageHeader(@RequestParam("body") String body) throws IOException {
+
+        var message1 = new SimpleMessage("server01", body + " send message to Queue as headers [1].");
+        rabbitHeaderPublisher.sendMessageToQueue(RabbitMQConfig.HEADERS_EXCHANGE_NAME, "",
+                message1, "email-type", "text");
+
+        return "headers massage: " + body;
+    }
+
 }
