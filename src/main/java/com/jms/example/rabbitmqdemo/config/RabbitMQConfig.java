@@ -312,6 +312,13 @@ public class RabbitMQConfig {
                 .whereAny(Map.of("email-type", "text")).match());
     }
 
+    @Bean
+    public Declarables bindingHeadersForQueueEmailName2(HeadersExchange headersExchange, Queue queueEmailWithHeader) {
+        return new Declarables(BindingBuilder.bind(queueEmailWithHeader).to(headersExchange)
+                .whereAll(Map.of("email-type", "text2",
+                                 "mime-type", "application")).match());
+    }
+
     //end configuration for HEADER exchange
 }
 
