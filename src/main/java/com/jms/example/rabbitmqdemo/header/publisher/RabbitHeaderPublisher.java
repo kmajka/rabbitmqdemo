@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.jms.example.rabbitmqdemo.config.RabbitMQConfig.rabbitHeaderTemplate;
+import static com.jms.example.rabbitmqdemo.configuration.RabbitMQConfig.CONVERTER_FOR_HEADER_EXCHANGE;
+import static com.jms.example.rabbitmqdemo.header.configuration.RabbitMQHeaderConfig.RABBIT_HEADER_TEMPLATE;
 
 @Component
 public class RabbitHeaderPublisher {
 
-    @Qualifier(rabbitHeaderTemplate)
     private final RabbitTemplate rabbitTemplate;
 
-    @Qualifier("converterForHeaderExchange")
     private final MessageConverter converterForHeaderExchange;
 
-    public RabbitHeaderPublisher(RabbitTemplate rabbitTemplate, MessageConverter converterForHeaderExchange) {
+    public RabbitHeaderPublisher(@Qualifier(RABBIT_HEADER_TEMPLATE) RabbitTemplate rabbitTemplate,
+                                 @Qualifier(CONVERTER_FOR_HEADER_EXCHANGE) MessageConverter converterForHeaderExchange) {
         this.rabbitTemplate = rabbitTemplate;
         this.converterForHeaderExchange = converterForHeaderExchange;
     }

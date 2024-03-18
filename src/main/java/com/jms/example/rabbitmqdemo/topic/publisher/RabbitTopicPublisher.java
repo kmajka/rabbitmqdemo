@@ -6,16 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import static com.jms.example.rabbitmqdemo.config.RabbitMQConfig.rabbitTopicTemplate;
+import static com.jms.example.rabbitmqdemo.topic.configuration.RabbitMQTopicConfig.RABBIT_TOPIC_TEMPLATE;
 
 @Component
 public class RabbitTopicPublisher {
 
-    @Autowired
-    @Qualifier(rabbitTopicTemplate)
     private final RabbitTemplate rabbitTemplate;
 
-    public RabbitTopicPublisher(RabbitTemplate rabbitTemplate) {
+    public RabbitTopicPublisher(@Qualifier(RABBIT_TOPIC_TEMPLATE) RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 

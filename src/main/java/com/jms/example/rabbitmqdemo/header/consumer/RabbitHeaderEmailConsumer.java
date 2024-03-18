@@ -1,6 +1,7 @@
 package com.jms.example.rabbitmqdemo.header.consumer;
 
-import com.jms.example.rabbitmqdemo.config.RabbitMQConfig;
+import com.jms.example.rabbitmqdemo.header.configuration.RabbitMQHeaderConfig;
+import com.jms.example.rabbitmqdemo.topic.configuration.RabbitMQTopicConfig;
 import com.jms.example.rabbitmqdemo.model.SimpleMessage;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -8,17 +9,18 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import static com.jms.example.rabbitmqdemo.configuration.RabbitMQConfig.CONVERTER_FOR_HEADER_EXCHANGE;
+
 @Component
 public class RabbitHeaderEmailConsumer {
 
-    @Qualifier("converterForHeaderExchange")
     private final MessageConverter converterForHeaderExchange;
 
-    public RabbitHeaderEmailConsumer(MessageConverter converterForHeaderExchange) {
+    public RabbitHeaderEmailConsumer(@Qualifier(CONVERTER_FOR_HEADER_EXCHANGE) MessageConverter converterForHeaderExchange) {
         this.converterForHeaderExchange = converterForHeaderExchange;
     }
 
-    @RabbitListener(queues = RabbitMQConfig.queueEmailWithHeaderName, containerFactory = RabbitMQConfig.myHeaderListenerFactory)
+    @RabbitListener(queues = RabbitMQHeaderConfig.QUEUE_EMAIL_WITH_HEADER_NAME, containerFactory = RabbitMQHeaderConfig.HEADER_LISTENER_FACTORY)
     public void receiveMessage(Message message) {
 
         //for String we can use MessageConverter
