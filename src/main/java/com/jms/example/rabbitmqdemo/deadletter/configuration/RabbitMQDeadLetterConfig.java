@@ -43,7 +43,7 @@ public class RabbitMQDeadLetterConfig {
         return rabbitTemplate;
     }
 
-    @Bean(name = "temporaryQueue")
+    @Bean(name = TEMPORARY_QUEUE_NAME)
     public Queue temporaryQueue() {
         return QueueBuilder.durable(TEMPORARY_QUEUE_NAME)
                 .withArgument("x-dead-letter-exchange", DLX_DEAD_LETTER_EXCHANGE_NAME)
@@ -60,12 +60,12 @@ public class RabbitMQDeadLetterConfig {
         return BindingBuilder.bind(temporaryQueue).to(temporaryExchange).with(TEMPORARY_QUEUE_NAME);
     }
 
-    @Bean(name = "dlxDeadLetterQueue")
+    @Bean
     public Queue dlxDeadLetterQueue() {
         return QueueBuilder.durable(DLX_DEAD_LETTER_QUEUE_NAME).build();
     }
 
-    @Bean(name = "dlxDeadLetterExchange")
+    @Bean
     public FanoutExchange dlxDeadLetterExchange() {
         return new FanoutExchange(DLX_DEAD_LETTER_EXCHANGE_NAME);
     }
