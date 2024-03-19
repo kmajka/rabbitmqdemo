@@ -71,7 +71,7 @@ public class RabbitMQDeadLetterConfig {
     }
 
     @Bean
-    public Binding deadLetterBinding(FanoutExchange dlxDeadLetterExchange, Queue dlxDeadLetterQueue) {
+    public Binding dlxDeadLetterBinding(FanoutExchange dlxDeadLetterExchange, Queue dlxDeadLetterQueue) {
         return BindingBuilder.bind(dlxDeadLetterQueue).to(dlxDeadLetterExchange);
     }
 

@@ -21,6 +21,5 @@ public class RabbitDeadLetterMessageConsumer {
     @RabbitListener(queues = RabbitMQDeadLetterConfig.DLX_DEAD_LETTER_QUEUE_NAME, containerFactory = RabbitMQDeadLetterConfig.TEMPORARY_LISTENER_FACTORY)
     public void processMessage(Message message) {
         System.out.println("queue -> Received dead letter message for consumer: " + message);
-        //throw new RuntimeException("Simulated error occurred!");
     }
 }

@@ -21,8 +21,8 @@ public class RabbitDeadLetterController {
     public String sendMessageDeadLetter(@RequestParam("body") String body) {
 
         var message1 = new SimpleMessage("server01", body + " send message to Queue as dead letter [1].");
-        rabbitDeadLetterPublisher.sendMessageToQueue(RabbitMQDeadLetterConfig.TEMPORARY_EXCHANGE_NAME, RabbitMQDeadLetterConfig.TEMPORARY_QUEUE_NAME,
-                message1);
+        rabbitDeadLetterPublisher.sendMessageToQueue(RabbitMQDeadLetterConfig.TEMPORARY_EXCHANGE_NAME,
+                RabbitMQDeadLetterConfig.TEMPORARY_QUEUE_NAME, message1);
 
         return "dead letter massage: " + body;
     }
