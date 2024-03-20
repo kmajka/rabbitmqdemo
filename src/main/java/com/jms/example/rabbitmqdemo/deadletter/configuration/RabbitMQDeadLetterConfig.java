@@ -22,7 +22,6 @@ public class RabbitMQDeadLetterConfig {
     public static final String DLX_DEAD_LETTER_QUEUE_NAME = "dlxDeadLetterQueue";
     public static final String DLX_DEAD_LETTER_EXCHANGE_NAME = "dlxDeadLetterExchange";
     public static final String DLQ_DEAD_LETTER_QUEUE_NAME = "dlqDeadLetterQueue";
-    public static final String DLQ_DEAD_LETTER_EXCHANGE_NAME = "dlqDeadLetterExchange";
 
     @Bean(name = TEMPORARY_LISTENER_FACTORY)
     public SimpleRabbitListenerContainerFactory temporaryListenerFactory(@Qualifier(CONNECTION_FACTORY) ConnectionFactory connectionFactory,
