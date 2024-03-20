@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import static com.jms.example.rabbitmqdemo.configuration.RabbitMQConfig.CONVERTER_FOR_HEADER_EXCHANGE;
+import static com.jms.example.rabbitmqdemo.deadletter.configuration.RabbitMQDeadLetterConfig.DLQ_DEAD_LETTER_QUEUE_NAME;
 import static com.jms.example.rabbitmqdemo.deadletter.configuration.RabbitMQDeadLetterConfig.RABBIT_TEMPORARY_TEMPLATE;
 
 @Service
@@ -25,6 +26,14 @@ public class RabbitDeadLetterPublisher {
     }
 
     public void sendMessageToQueue(String deadLetterExchangeName, String key, SimpleMessage simpleMessage) {
+
+        MessageProperties messageProperties = new MessageProperties();
+        Message message = converterForHeaderExchange.toMessage(simpleMessage, messageProperties);
+
+        this.rabbitTemplate.convertAndSend(deadLetterExchangeName, key, message);
+    }
+
+    public void sendMessageToQueue2(String deadLetterExchangeName, String key, SimpleMessage simpleMessage) {
 
         MessageProperties messageProperties = new MessageProperties();
         Message message = converterForHeaderExchange.toMessage(simpleMessage, messageProperties);

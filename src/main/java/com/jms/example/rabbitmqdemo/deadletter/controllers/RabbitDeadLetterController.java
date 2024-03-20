@@ -26,4 +26,15 @@ public class RabbitDeadLetterController {
 
         return "dead letter massage: " + body;
     }
+
+    //  http://localhost:8080/send-message-deadletter-dlq-queue?body=this is some message
+    @GetMapping("send-message-deadletter-dlq-queue")
+    public String sendMessageDeadLetterDlq(@RequestParam("body") String body) {
+
+        var message1 = new SimpleMessage("server01", body + " send message to Queue as dead letter [1].");
+        rabbitDeadLetterPublisher.sendMessageToQueue2(RabbitMQDeadLetterConfig.TEMPORARY_EXCHANGE_NAME,
+                RabbitMQDeadLetterConfig.TEMPORARY_QUEUE_NAME, message1);
+
+        return "dead letter massage: " + body;
+    }
 }

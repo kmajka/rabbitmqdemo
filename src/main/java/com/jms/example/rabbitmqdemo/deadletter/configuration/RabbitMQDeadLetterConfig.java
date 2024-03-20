@@ -21,6 +21,8 @@ public class RabbitMQDeadLetterConfig {
     public static final String TEMPORARY_EXCHANGE_NAME = "temporaryExchange";
     public static final String DLX_DEAD_LETTER_QUEUE_NAME = "dlxDeadLetterQueue";
     public static final String DLX_DEAD_LETTER_EXCHANGE_NAME = "dlxDeadLetterExchange";
+    public static final String DLQ_DEAD_LETTER_QUEUE_NAME = "dlqDeadLetterQueue";
+    public static final String DLQ_DEAD_LETTER_EXCHANGE_NAME = "dlqDeadLetterExchange";
 
     @Bean(name = TEMPORARY_LISTENER_FACTORY)
     public SimpleRabbitListenerContainerFactory temporaryListenerFactory(@Qualifier(CONNECTION_FACTORY) ConnectionFactory connectionFactory,
@@ -50,6 +52,14 @@ public class RabbitMQDeadLetterConfig {
                 .build();
     }
 
+//    @Bean(name = TEMPORARY_QUEUE_NAME)
+//    public Queue temporaryQueue() {
+//        return QueueBuilder.durable(TEMPORARY_QUEUE_NAME)
+//                .withArgument("x-dead-letter-exchange", "")
+//                .withArgument("x-dead-letter-routing-key", DLQ_DEAD_LETTER_QUEUE_NAME)
+//                .build();
+//    }
+
     @Bean
     public DirectExchange temporaryExchange() {
         return new DirectExchange(TEMPORARY_EXCHANGE_NAME);
@@ -73,6 +83,13 @@ public class RabbitMQDeadLetterConfig {
     @Bean
     public Binding dlxDeadLetterBinding(FanoutExchange dlxDeadLetterExchange, Queue dlxDeadLetterQueue) {
         return BindingBuilder.bind(dlxDeadLetterQueue).to(dlxDeadLetterExchange);
+    }
+
+    @Bean
+    public Queue dlqDeadLetterQueue() {
+        return QueueBuilder
+                .durable(DLQ_DEAD_LETTER_QUEUE_NAME)
+                .build();
     }
 
 }
