@@ -1,4 +1,4 @@
-package com.jms.example.rabbitmqdemo.defaultexchange;
+package com.jms.example.rabbitmqdemo.defaultexchange.consumer;
 
 import com.jms.example.rabbitmqdemo.defaultexchange.configuration.RabbitMQDefaultExchangeConfig;
 import com.jms.example.rabbitmqdemo.model.SimpleMessage;
